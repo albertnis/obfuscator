@@ -1,0 +1,175 @@
+body {
+    height: 100%;
+    background-color: #900D13;
+    font-family: Catamaran, Roboto, "San Francisco", Helvetica, Arial, sans-serif;
+    color: #fcfcfc;
+}
+
+.row {
+    width: 100%;
+}
+
+b {
+    font-weight: 600;
+}
+
+.row-header {
+    position: relative;
+    background-color: #54207C;
+    text-align: center;
+    padding: 48px 0;
+}
+
+.row-header h1 {
+    font-size: 96px;
+}
+
+.row-subheader {
+    background-color:#375C8D;
+    padding: 24px 0;
+}
+
+.subheader {
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+}
+
+img.backdrop-header {
+    width: 100%;
+    height: auto;
+}
+
+.container {
+    width: 900px;
+    max-width: 100%;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/*@media(max-width: 948px) {
+    .container {
+        width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}*/
+
+.step {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.step-hint {
+    height: 32px;
+    width: 32px;
+    display: inline-block;
+    background-color: rgba(243,243,243,0.4);
+    border-radius: 16px;
+    line-height: 32px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+input[type="text"] {
+    background: none;
+    border: none;
+    border-bottom-color: rgba(243,243,243,0.4);
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    transition: border-bottom-color .3s ease-in-out;
+    outline: none;
+    color: #fcfcfc;
+    font-size: 32px;
+    margin-top: 14px;
+    text-align: center;
+}
+
+.lang {
+    display: inline-block;
+    background: none;
+    border: none;
+    border-bottom-color: rgba(243,243,243,0.4);
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    transition: border-bottom-color .3s ease-in-out;
+    outline: none;
+    color: #fcfcfc;
+    font-size: 32px;
+    margin-top: 14px;
+    text-align: center;
+    min-width: 300px;
+}
+
+.lang .drpy-dropdown.open {
+    margin-top: 4px;
+}
+
+.lang .drpy-option {
+    width: 50%;
+    display: inline-block;
+}
+
+.drpy-selected.drpy-placeheld {
+    color: rgba(243,243,243,0.6);
+}
+
+input[type="text"]:focus {
+    border-bottom-color: rgba(243,243,243,1);
+    outline: none;
+}
+
+button.do-obfuscate {
+    background-color: rgba(0,0,0,0);
+    font-size: 32px;
+    color: #fcfcfc;
+    border: 2px solid rgba(243,243,243,0.4);
+    padding: 5px;
+    margin-top: 8px;
+    width: 148px;
+    cursor: pointer;
+}
+
+button.do-obfuscate:hover {
+    border-color: rgba(243,243,243,0.6);
+}
+
+.row-output {
+    width: 700px;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+    margin: 36px auto;
+    font-size: 24px;
+    padding: 12px;
+    background-color: rgba(243,243,243,1);
+    color: #375C8D;
+    line-height: 36px;
+    display: none;
+    position: relative;
+    left: 0;
+    transition: left .3s ease-out;
+}
+
+
+.row-output .final {
+    font-weight: 600;
+}
+
+::-webkit-input-placeholder {
+   color: rgba(243,243,243,0.6);
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: rgba(243,243,243,0.6);
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: rgba(243,243,243,0.6);
+}
+
+:-ms-input-placeholder {
+   color: rgba(243,243,243,0.6);
+}

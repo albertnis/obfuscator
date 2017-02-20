@@ -1,0 +1,67 @@
+.drpy-select {
+    display: inline-block;
+    width: auto;
+    background-color: #FFF;
+    max-width: 100%;
+    font-size: 1em;
+    padding: 0.5rem;
+    width: 20px;
+    position: relative;
+}
+
+ul.drpy-dropdown {
+    display: block;
+    pointer-events: none;
+    list-style: none;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    top: 100%;
+    margin-top: -4px;
+    left: 0;
+    min-width: 100%;
+    max-height: 800%;
+    overflow-y: auto;
+    background-color: rgba(254,254,254,1);
+    color: #111;
+    transition: opacity .2s ease-out 0s, margin-top .2s ease-out 0s;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.2);
+}
+
+ul.drpy-dropdown.open {
+    opacity: 1;
+    margin-top: 0;
+    pointer-events: auto;
+}
+
+ul.drpy-dropdown li.drpy-option {
+    font-size: 14px;
+    line-height: normal;
+    margin: 0;
+    padding: 4px;
+    cursor: default;
+}
+
+ul.drpy-dropdown li.drpy-option:hover {
+    background-color: #BBB;
+}
+
+.drpy-selected {
+    cursor: default;
+}
+
+.drpy-togg {
+    color: rgba(243,243,243,0.6);
+}
+
+.drpy-selected:hover + .drpy-togg, .drpy-togg:hover {
+    color: rgb(243,243,243);
+}
+
+.drpy-selected + .drpy-togg {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    margin-top: -9px;
+    font-size: 18px;
+}
