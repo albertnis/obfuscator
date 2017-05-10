@@ -15,6 +15,6 @@ After cloning, create a `config.php` file in the `php` subdirectory. This should
 - [Go to the project][project].
 
 [project]:      https://albertnis.com/obfuscator/
-[screenshot]:   http://i.imgur.com/hpZNirY.png
+[screenshot]:   http://i.imgur.com/q8AI5vB.png
 [api]:          https://www.microsoft.com/en-us/translator/getstarted.aspx
 [blog]:         http://albertnis.com/posts/obfuscator/
