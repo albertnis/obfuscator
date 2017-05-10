@@ -1,15 +1,17 @@
 <?php
 
 /* INPUT PARAMETERS */
-$text = $_GET['text'];
-$zeroeth = $_GET['from'];
-$first= $_GET['a'];
-$second = $_GET['b'];
-$third = $_GET['c'];
-$current = $text;
+$text = $_POST['text'];
+$langs = json_decode($_POST['langs']);
+array_push($langs, $langs[0]);
+$outputs = array([
+    "lang" => $langs[0],
+    "text" => $text
+]);
 
 /* RETRIEVE API KEY */
 include("config.php");
+include("mstapi.php");
 
 /* TRANSLATE */
 if (strlen($text) > 100 || strlen($text) < 3) {
@@ -17,110 +19,52 @@ if (strlen($text) > 100 || strlen($text) < 3) {
 	echo '<p>The word or phrase must be 3-100 characters in length</p>';
 }
 else {
-    //We're good to translate
-    $url = 'https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1/Translate?Text=%27'.urlencode($current).'%27&To=%27' . $first . '%27&From=%27' . $zeroeth. '%27&$top=100&$format=json';
-    $handle = curl_init ($url);
-    if ($handle) {
-        $curlOptArr = array(
-            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_USERPWD => $api_key . ':' . $api_key,
-            CURLOPT_RETURNTRANSFER => TRUE
-
-        );
-        curl_setopt_array($handle, $curlOptArr);
-        $response = curl_exec($handle);
-        $data = json_decode($response,true);
-        if (is_array($data)) {
-            if (isset($data['d']['results'][0]['Text'])) {
-                $current = $data['d']['results'][0]['Text'];
-                echo '<p class="transition">'.urldecode($current).'</p>';
-            } else {
-                print false;
+    try {
+        // Authentication
+        $accessToken = "";
+        if (file_exists($accessToken_filename)) {
+            // Check for pre-existing key
+            $lastGen = filemtime($accessToken_filename);
+            if ((time() - $lastGen) < 540) {
+                // If key generated in last 7 minutes, re-use it
+                $accessToken = file_get_contents($accessToken_filename);
             }
-        } else {
-            print $text;
         }
-        $errRet = curl_error($handle);
-        curl_close($handle);
-    }
+        if ($accessToken === "") {
+            // If no valid pre-stored key, ask Microsoft nicely for a new one
+            $auther = new AccessTokenAuthentication();
+            $accessToken = $auther->getToken($api_key);
+            file_put_contents($accessToken_filename, $accessToken);
+        }
+        $authHeader = "Authorization: Bearer ".$accessToken;
 
-    $url = 'https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1/Translate?Text=%27'.urlencode($current).'%27&To=%27' . $second . '%27&From=%27' . $first. '%27&$top=100&$format=json';
-    $handle = curl_init ($url);
-    if ($handle) {
-        $curlOptArr = array(
-            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_USERPWD => $api_key . ':' . $api_key,
-            CURLOPT_RETURNTRANSFER => TRUE
+        // Translate iteratively
+        $translatorObj = new HTTPTranslator();
+        for ($i = 1; $i < sizeof($langs); $i++) {
 
-        );
-        curl_setopt_array($handle, $curlOptArr);
-        $response = curl_exec($handle);
-        $data = json_decode($response,true);
-        if (is_array($data)) {
-            if (isset($data['d']['results'][0]['Text'])) {
-                $current = $data['d']['results'][0]['Text'];
-                echo '<p class="transition">'.urldecode($current).'</p>';
-            } else {
-                print false;
+            // Load next languages
+            $from = $langs[$i-1];
+            $to = $langs[$i];
+
+            // Prepare request
+            $params = "text=".urlencode($outputs[$i-1]["text"])."&to=".$to."&from=".$from;
+            $translateUrl = "https://api.microsofttranslator.com/v2/Http.svc/Translate?$params";
+
+            // Process response
+            $curlResponse = $translatorObj->curlRequest($translateUrl, $authHeader);
+            $xmlObj = simplexml_load_string($curlResponse);
+            foreach((array)$xmlObj[0] as $val){
+                $translatedStr = $val;
             }
-        } else {
-            print $text;
+            array_push($outputs, array("lang" => $langs[$i], "text" => $translatedStr));
         }
-        $errRet = curl_error($handle);
-        curl_close($handle);
+
+        echo json_encode($outputs);
+
+
     }
-
-    $url = 'https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1/Translate?Text=%27'.urlencode($current).'%27&To=%27' . $third . '%27&From=%27' . $second . '%27&$top=100&$format=json';
-    $handle = curl_init ($url);
-    if ($handle) {
-        $curlOptArr = array(
-            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_USERPWD => $api_key . ':' . $api_key,
-            CURLOPT_RETURNTRANSFER => TRUE
-
-        );
-        curl_setopt_array($handle, $curlOptArr);
-        $response = curl_exec($handle);
-        $data = json_decode($response,true);
-        if (is_array($data)) {
-            if (isset($data['d']['results'][0]['Text'])) {
-                $current = $data['d']['results'][0]['Text'];
-                echo '<p class="transition">'.urldecode($current).'</p>';
-            } else {
-                print false;
-            }
-        } else {
-            print $text;
-        }
-        $errRet = curl_error($handle);
-        curl_close($handle);
+    catch (Exception $e) {
+        echo "Exception: ".$e->getMessage().PHP_EOL;
     }
-
-    $url = 'https://api.datamarket.azure.com/Data.ashx/Bing/MicrosoftTranslator/v1/Translate?Text=%27'.urlencode($current).'%27&To=%27' . $zeroeth . '%27&From=%27' . $third . '%27&$top=100&$format=json';
-    $handle = curl_init ($url);
-    if ($handle) {
-        $curlOptArr = array(
-            CURLOPT_HTTPAUTH => CURLAUTH_BASIC,
-            CURLOPT_USERPWD => $api_key . ':' . $api_key,
-            CURLOPT_RETURNTRANSFER => TRUE
-
-        );
-        curl_setopt_array($handle, $curlOptArr);
-        $response = curl_exec($handle);
-        $data = json_decode($response,true);
-        if (is_array($data)) {
-            if (isset($data['d']['results'][0]['Text'])) {
-                $current = $data['d']['results'][0]['Text'];
-                echo '<p>'.urldecode($current).'</p>';
-            } else {
-                print false;
-            }
-        } else {
-            print $text;
-        }
-        $errRet = curl_error($handle);
-        curl_close($handle);
-    }
-    $uni = substr(md5(microtime()),rand(0,26),5);
 }
 ?>
