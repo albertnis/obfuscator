@@ -1,5 +1,8 @@
 # Obfuscator
 
+> [!IMPORTANT]
+> Superseded by [albertnis/obfuscator-serverless](https://github.com/albertnis/obfuscator-serverless)
+
 *Highlighting the potentially hilarious flaws of modern computer translators*
 
 [![Obfuscator screenshot][screenshot]][project]
